@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>CREATE CASH</h1>
+    <div>
+        <form action="{{ path('create_cash') }}">
+            <label for="amount">Amount
+                <input type="text" name="amount" id="amount">
+            </label>
+            <button id="validate" type="submit">validate transaction</button>
+        </form>
+    </div>
+{% endblock %}
