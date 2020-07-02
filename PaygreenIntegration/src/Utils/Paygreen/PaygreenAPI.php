@@ -99,8 +99,8 @@ class PaygreenAPI
     {
         $ch = curl_init();
         curl_setopt_array($ch, array(
-            // CURLOPT_SSL_VERIFYPEER => false,
-            // CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_URL => $allData_request['url'],
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
@@ -169,7 +169,7 @@ class PaygreenAPI
             $method = 'GET';
         }
 
-        $url = $this->getHost() . $this->getUi();
+        $url = $this->getHost() . '/api/' . $this->getUi();
         switch ($action) {
             case 'oAuth-access':
                 $url = $this->getHost() . '/auth';

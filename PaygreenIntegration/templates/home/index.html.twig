@@ -1,13 +1,23 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>CREATE CASH</h1>
+
     <div>
+        <h1>CREATE CASH</h1>
         <form action="{{ path('create_cash') }}">
-            <label for="amount">Amount
-                <input type="text" name="amount" id="amount">
-            </label>
+            <small style="color: red;">{{ error }}</small>
+            <label for="amount">Amount (€)</label>
+            <input type="text" name="amount" id="amount" placeholder="100.00">
+
             <button id="validate" type="submit">validate transaction</button>
+        </form>
+    </div>
+    <div>
+        <h1>GET TRANSACTION INFOS</h1>
+        <form action="{{ path('get_details') }}">
+            <label for="pid">Transaction ID</label>
+            <input type="text" name="pid" id="pid" placeholder="rerg1561651gersq651">
+            <button id="get_details" type="submit">get transaction info</button>
         </form>
     </div>
 {% endblock %}
