@@ -3,17 +3,25 @@
 class PaygreenTransactionHelper
 {
 
-
+    /**
+     * @return mixed
+     */
     public static function getUi()
     {
         return $_ENV['UI'];
     }
 
+    /**
+     * @return mixed
+     */
     public static function getCp()
     {
         return $_ENV['CP'];
     }
 
+    /**
+     * @return mixed
+     */
     public static function getHost()
     {
         return $_ENV['HOST'];
@@ -63,6 +71,10 @@ class PaygreenTransactionHelper
         return self::getInstance()->requestApi('create-subscription', $data);
     }
 
+    /**
+     * @param $data
+     * @return mixed|object
+     */
     public static function createTokenize($data)
     {
         return self::getInstance()->requestApi('create-tokenize', $data);
