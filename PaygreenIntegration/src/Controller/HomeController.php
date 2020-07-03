@@ -75,6 +75,6 @@ class HomeController extends AbstractController
      */
     public function getDetails(Request $request)
     {
-        return new JsonResponse(['data' => PaygreenTransactionHelper::getTransactionInfo($request->get('pid'))]);
+        return new JsonResponse(PaygreenTransactionHelper::getTransactionInfo($request->get('pid')));
     }
 }
