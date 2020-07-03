@@ -7,7 +7,7 @@ PAYGREEN TEST est un projet Symfony permettant d'effectuer des transactions et d
 
 * Lancer les commandes suivantes dans le repertoire où vous souhaitez mettre le projet : 
 * `git clone https://github.com/tsioryras/paygreen.git` 
-* `cd PaygreenIntegration`
+* `cd paygreen\PaygreenIntegration`
 * `composer install`
 * `yarn install`
 * `symfony serve --no-tls --daemon`
