@@ -23,3 +23,18 @@ body {
     background: #22b141;
     color: #ffffff;
 }
+
+#get-details {
+    margin-bottom: 1rem;
+}
+
+.result {
+    width: 100%;
+    margin-top: 1rem;
+    text-align: center;
+}
+
+th, td {
+    padding: 1rem;
+    text-align: left;
+}
