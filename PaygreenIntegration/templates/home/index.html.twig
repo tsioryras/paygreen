@@ -1,23 +1,68 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
-    <div>
-        <h1>CREATE CASH</h1>
-        <form action="{{ path('create_cash') }}">
-            <small style="color: red;">{{ error }}</small>
-            <label for="amount">Amount (€)</label>
-            <input type="text" name="amount" id="amount" placeholder="100.00">
-
-            <button id="validate" type="submit">validate transaction</button>
-        </form>
-    </div>
-    <div>
-        <h1>GET TRANSACTION INFOS</h1>
-        <form action="{{ path('get_details') }}">
-            <label for="pid">Transaction ID</label>
-            <input type="text" name="pid" id="pid" placeholder="rerg1561651gersq651">
-            <button id="get_details" type="submit">get transaction info</button>
-        </form>
+    <div class="alert alert-success notif-transaction d-none" role="alert"></div>
+    <div class="row">
+        <div class="col-md-5 card">
+            <div class="card-header text-center">PAYGREEN CREATE CASH</div>
+            <div class="card-body">
+                <form action="{{ path('create_cash') }}" id="create-cash">
+                    <div class="form-group">
+                        <label for="lastName">NOM</label>
+                        <input class="form-control" type="text" id="lastName" name="lastName" placeholder="Henry">
+                    </div>
+                    <div class="form-group">
+                        <label for="firstName">PRENOM</label>
+                        <input class="form-control" type="text" id="firstName" name="firstName" placeholder="Marc">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">EMAIL</label>
+                        <input class="form-control" type="text" id="email" name="email" placeholder="mh@company.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="country">PAYS</label>
+                        <select class="form-control" id="country">
+                            <option value="FR">FR</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="amount">MONTANT (€)</label>
+                        <input type="text" class="form-control" id="amount" aria-describedby="amountHelp"
+                               placeholder="1000">
+                        <small id="amountHelp" class="text-danger"></small>
+                    </div>
+                    <div class="form-group text-center">
+                        <button type="submit" id="validate-create-cash" class="btn btn-outline-success">
+                            VALIDER TRANSACTION
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-5 card">
+            <div class="card-header text-center">PAYGREEN INFO TRANSACTION</div>
+            <div class="card-body">
+                <form action="{{ path('get_details') }}" id="get-details" class="form-inline">
+                    <div class="col-md-12">
+                        <div class="input-group ">
+                            <input type="text" class="form-control" id="pid" name="pid" aria-describedby="pidHelp"
+                                   placeholder="tr236165ds646546465">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn-secondary btn" id="validate-pid">VOIR</button>
+                            </div>
+                            <div id="pidHelp"></div>
+                        </div>
+                    </div>
+                </form>
+                <div id="result">
+                    <table class="table-striped"></table>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
+    {% block javascripts %}
+        {{ parent() }}
+        {{ encore_entry_script_tags('transaction') }}
+    {% endblock %}
+

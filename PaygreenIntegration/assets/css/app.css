@@ -1,0 +1,25 @@
+@import "../../node_modules/bootstrap/dist/css/bootstrap.css";
+
+body {
+    background-color: lightgray;
+    padding: 1rem;
+}
+
+.notif-transaction {
+    position: fixed;
+    z-index: 1000;
+    margin-top: 1rem;
+    margin-left: 25%;
+    width: 33%;
+    height: 3rem;
+}
+
+.card {
+    margin: 0 auto;
+    padding: 0;
+}
+
+.card-header {
+    background: #22b141;
+    color: #ffffff;
+}
