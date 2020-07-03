@@ -1,6 +1,6 @@
 $(document).ready(function () {
     //Validate transaction
-    $('#validate-create-cash').on('click', function (e) {
+    $('#validate-create-cash').on('click', (e) => {
         e.preventDefault();
         $.ajax({
             url: $('#create-cash').attr('action'),
@@ -20,11 +20,8 @@ $(document).ready(function () {
                     $('#lastName').val('');
                     $('#email').val('');
                     $('#amount').val('');
-                    $('.notif-transaction').text('Transaction bien effectuée');
+                    $('#message').text('Transaction (ID : ' + data.data.data.id + ') bien effectuée');
                     $('.notif-transaction').removeClass('d-none');
-                    setTimeout(function () {
-                        $('.notif-transaction').addClass('d-none');
-                    }, 3000);
                 }
 
                 $('#amountHelp').text(data.error);
@@ -32,8 +29,12 @@ $(document).ready(function () {
         });
     });
 
+    $('button.close').on('click', () => {
+        $('.notif-transaction').addClass('d-none');
+    });
+
 //Get transaction info
-    $('#validate-pid').on('click', function (e) {
+    $('#validate-pid').on('click', (e) => {
         e.preventDefault();
         $('#pid').removeClass('is-invalid');
         $.ajax({
@@ -64,7 +65,7 @@ $(document).ready(function () {
                         '<td>' + data.data.result.status + ' </td>' +
                         '</tr>' +
                         '<tr><th scope="row">BUYER</th>' +
-                        '<td>' + data.data.buyer.companyName + ' (' + data.data.buyer.id + ' ' + data.data.buyer.lastName + ')</td>' +
+                        '<td>' + data.data.buyer.companyName + ' (id: ' + data.data.buyer.id + ' ' + data.data.buyer.lastName + ')</td>' +
                         '</tr>' +
                         '<tr><th scope="row">CREATED AT</th>' +
                         '<td>' + createdAt.toLocaleDateString() + ' </td>' +

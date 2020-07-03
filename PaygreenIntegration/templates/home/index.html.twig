@@ -1,9 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="alert alert-success notif-transaction d-none" role="alert"></div>
+
     <div class="row">
         <div class="col-md-5 card">
+            <div class="notif-transaction alert alert-success alert-dismissible d-none" role="alert">
+                <small id="message"></small>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
             <div class="card-header text-center">PAYGREEN CREATE CASH</div>
             <div class="card-body">
                 <form action="{{ path('create_cash') }}" id="create-cash">

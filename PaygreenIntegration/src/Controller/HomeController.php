@@ -54,7 +54,7 @@ class HomeController extends AbstractController
                         "email" => $request->request->get('email'),
                         "country" => $request->request->get('country'),
                         "ipAddress" => $_SERVER['REMOTE_ADDR'],
-                        "companyName" => "PayGreen"
+                        "companyName" => $request->request->get('companyName')
                     ],
                     "metadata" => [
                         "orderId" => "test-123",
