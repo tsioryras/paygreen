@@ -4,22 +4,22 @@ namespace Paygreen;
 
 class PaygreenOAuthHelper
 {
-    private static $paygreenInstance = null;
+    private static $paygreenOAuthInstance = null;
 
     /**
-     * @param PaygreenAPI|null $paygreenInstance
+     * @param PaygreenOAuth|null $paygreenOAuthInstance
      */
-    public static function setPaygreenInstance($paygreenInstance = null): void
+    public static function setPaygreenInstance($paygreenOAuthInstance = null): void
     {
-        self::$paygreenInstance = $paygreenInstance ?? new PaygreenAPI();
+        self::$paygreenOAuthInstance = $paygreenOAuthInstance ?? new PaygreenOAuth();
     }
 
     /**
-     * @return PaygreenAPI|null
+     * @return PaygreenOAuth|null
      */
-    public static function getPaygreenInstance()
+    public static function getPaygreenOAuthInstance()
     {
-        return self::$paygreenInstance;
+        return self::$paygreenOAuthInstance;
     }
 
     /**
@@ -47,7 +47,7 @@ class PaygreenOAuthHelper
     public static function getEndpoint($action)
     {
         $action = $action == 'declare' ? '' : $action;
-        return self::getPaygreenInstance()->getHost() . '/auth/' . $action;
+        return self::getPaygreenOAuthInstance()->getPaygreenApiInstance()->getHost() . '/auth/' . $action;
     }
 
 }

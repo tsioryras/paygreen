@@ -22,11 +22,27 @@ class PaygreenAPI
     }
 
     /**
+     * @param mixed|string|null $ui
+     */
+    public function setUi($ui): void
+    {
+        $this->ui = $ui;
+    }
+
+    /**
      * @return string|mixed
      */
     public function getUi()
     {
         return $this->ui;
+    }
+
+    /**
+     * @param mixed|string|null $cp
+     */
+    public function setCp($cp): void
+    {
+        $this->cp = $cp;
     }
 
     /**

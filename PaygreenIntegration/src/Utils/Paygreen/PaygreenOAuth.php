@@ -13,8 +13,8 @@ class PaygreenOAuth
 
     /**
      * PaygreenOAuth constructor.
-     * @param string $name
-     * @param string $email
+     * @param string|null $name
+     * @param string|null $email
      * @param PaygreenAPI|null $paygreenApiInstance
      * @param string|null $ipAddress
      * @param string|null $phone
@@ -45,7 +45,7 @@ class PaygreenOAuth
     }
 
     /**
-     * @return mixed
+     * @return string|mixed
      */
     public function getName()
     {
@@ -53,15 +53,15 @@ class PaygreenOAuth
     }
 
     /**
-     * @param mixed $name
+     * @param string|mixed $name
      */
-    public function setName($name): void
+    public function setName(?string $name): void
     {
         $this->name = $name;
     }
 
     /**
-     * @return mixed
+     * @return string|mixed|mixed
      */
     public function getEmail()
     {
@@ -77,18 +77,18 @@ class PaygreenOAuth
     }
 
     /**
-     * @return mixed|null
+     * @return string|mixed|null
      */
-    public function getIpAddress(): ?mixed
+    public function getIpAddress()
     {
         return $this->ipAddress;
     }
 
 
     /**
-     * @param mixed|null $ipAddress
+     * @param string|null $ipAddress
      */
-    public function setIpAddress(?mixed $ipAddress): void
+    public function setIpAddress(?string $ipAddress): void
     {
         $this->ipAddress = $ipAddress;
     }
@@ -102,9 +102,9 @@ class PaygreenOAuth
     }
 
     /**
-     * @param null $phone
+     * @param string|null $phone
      */
-    public function setPhone($phone): void
+    public function setPhone(?string $phone): void
     {
         $this->phone = $phone;
     }
