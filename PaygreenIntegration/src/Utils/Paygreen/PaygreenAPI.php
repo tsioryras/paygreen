@@ -2,7 +2,6 @@
 
 class PaygreenAPI
 {
-    //Les valeurs de $ui, $cp et $host peuvent-être placées dans le fichier .env et non ici
     private $ui;
     private $cp;
     private $host;
@@ -13,11 +12,11 @@ class PaygreenAPI
      * @param $cp
      * @param $host
      */
-    public function __construct($ui, $cp, $host)
+    public function __construct($ui = null, $cp = null, $host = null)
     {
-        $this->ui = $ui;
-        $this->cp = $cp;
-        $this->host = $host;
+        $this->ui = $ui == null ? $_ENV['UI'] : $ui;
+        $this->cp = $cp == null ? $_ENV['CP'] : $cp;
+        $this->host = $host == null ? $_ENV['HOST'] : $host;
     }
 
     /**
@@ -49,10 +48,7 @@ class PaygreenAPI
      */
     public function setHost($host = null)
     {
-        if (!isset($host)) {
-            $host = 'https://paygreen.fr';
-        }
-        $this->host = $host . '/api';
+        $this->host = $host == null ? $host : 'https://paygreen.fr';
     }
 
     /**
@@ -61,10 +57,7 @@ class PaygreenAPI
      */
     public function isContainsError($var)
     {
-        if (isset($var->error)) {
-            return true;
-        }
-        return false;
+        return isset($var->error);
     }
 
     /**

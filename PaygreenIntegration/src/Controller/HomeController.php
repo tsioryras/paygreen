@@ -62,7 +62,7 @@ class HomeController extends AbstractController
                     ],
                 ]
             ];
-            return new JsonResponse(['data' => PaygreenTransactionHelper::createCash($data), 'error' => '']);
+            return new JsonResponse(['data' => PaygreenTransactionHelper::transactionFunctions('create-cash', $data), 'error' => '']);
         }
         $error = 'Le montant doit-être un nombre (avec au plus 2 chiffres après la virgule)';
         return new JsonResponse(['error' => $error]);
@@ -75,6 +75,6 @@ class HomeController extends AbstractController
      */
     public function getDetails(Request $request)
     {
-        return new JsonResponse(PaygreenTransactionHelper::getTransactionInfo($request->get('pid')));
+        return new JsonResponse(PaygreenTransactionHelper::transactionFunctions('get-datas', ['pid' => $request->get('pid')]));
     }
 }

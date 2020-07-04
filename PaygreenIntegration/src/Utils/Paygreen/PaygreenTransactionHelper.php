@@ -2,141 +2,46 @@
 
 class PaygreenTransactionHelper
 {
-
-    /**
-     * @return mixed
-     */
-    public static function getUi()
-    {
-        return $_ENV['UI'];
-    }
-
-    /**
-     * @return mixed
-     */
-    public static function getCp()
-    {
-        return $_ENV['CP'];
-    }
-
-    /**
-     * @return mixed
-     */
-    public static function getHost()
-    {
-        return $_ENV['HOST'];
-    }
-
     /**
      * @return PaygreenAPI|null
      */
     public static function getInstance()
     {
-        return new PaygreenAPI(self::getUi(), self::getCp(), self::getHost());
+        return new PaygreenAPI();
     }
 
     /**
-     * @param $pid
-     * @return mixed|object
-     */
-    public static function validDeliveryPayment($pid)
-    {
-        return self::getInstance()->requestApi('delivery', ['pid' => $pid]);
-    }
-
-    /**
-     * @param $data
-     * @return mixed|object
-     */
-    public static function createCash($data)
-    {
-        return self::getInstance()->requestApi('create-cash', $data);
-    }
-
-    /**
-     * @param $data
-     * @return mixed|object
-     */
-    public static function createXTime($data)
-    {
-        return self::getInstance()->requestApi('create-xtime', $data);
-    }
-
-    /**
-     * @param $data
-     * @return mixed|object
-     */
-    public static function createSubscription($data)
-    {
-        return self::getInstance()->requestApi('create-subscription', $data);
-    }
-
-    /**
-     * @param $data
-     * @return mixed|object
-     */
-    public static function createTokenize($data)
-    {
-        return self::getInstance()->requestApi('create-tokenize', $data);
-    }
-
-    /**
-     * @param $pid
-     * @return mixed|object
-     */
-    public static function getTransactionInfo($pid)
-    {
-        return self::getInstance()->requestApi('get-datas', ['pid' => $pid]);
-    }
-
-    /**
-     * @return mixed|object
-     */
-    public static function getStatusShop()
-    {
-        return self::getInstance()->requestApi('get-data', ['type' => 'shop']);
-    }
-
-    /**
-     * @param $pid
-     * @param $amount
+     * @param $action
+     * @param null $data
+     * @param null $activate
+     * @param null $pid
+     * @param null $amount
      * @return bool|mixed|object
      */
-    public static function refundOrder($pid, $amount)
+    public static function transactionFunctions($action, $data = null, $activate = null, $pid = null, $amount = null)
     {
-        if (empty($pid)) {
-            return false;
+        switch ($action) {
+            case 'refund':
+                if ($pid == null) {
+                    return false;
+                }
+
+                $data = ['pid' => $pid];
+                if ($amount != null) {
+                    $data['content'] = ['amount' => $amount * 100];
+                }
+                break;
+            case 'validate-shop':
+                if ($activate != 1 && $activate != 0) {
+                    return false;
+                }
+                $data = ['content' => ['activate' => $activate]];
+                break;
+            default:
+                break;
         }
 
-        $allData = ['pid' => $pid];
-        if ($amount != null) {
-            $allData['content'] = array('amount' => $amount * 100);
-        }
-
-        return self::getInstance()->requestApi('refund', $allData);
-    }
-
-    /**
-     * @param $data
-     * @return mixed|object
-     */
-    public static function sendFingerprintDatas($data)
-    {
-        $allData['content'] = $data;
-        return self::getInstance()->requestApi('send-ccarbone', $allData);
-    }
-
-    /**
-     * @param $activate
-     * @return bool|mixed|object
-     */
-    public static function validateShop($activate)
-    {
-        if ($activate != 1 && $activate != 0) {
-            return false;
-        }
-        $allData['content'] = array('activate' => $activate);
-        return self::getInstance()->requestApi('validate-shop', $allData);
+        return self::getInstance()->requestApi($action, $data);
     }
 
     /**
@@ -144,7 +49,7 @@ class PaygreenTransactionHelper
      */
     public static function validIdShop()
     {
-        $valid = self::getInstance()->requestApi('are-valid-ids', null);
+        $valid = self::transactionFunctions('are-valid-ids');
 
         if ($valid != false) {
             if (isset($valid->error)) {
@@ -159,48 +64,40 @@ class PaygreenTransactionHelper
     }
 
     /**
+     * @param $accountType
      * @return array|bool
      */
-    public static function getAccountInfos()
+    public static function getAccountInfos($accountType)
     {
-        $infosAccount = array();
+        $infosAccount = [];
 
-        $account = self::getInstance()->requestApi('get-data', ['type' => 'account']);
+        $account = self::transactionFunctions('get-data', ['type' => $accountType]);
         if (self::getInstance()->isContainsError($account)) {
             return $account->error;
         }
         if ($account == false) {
             return false;
         }
-        $infosAccount['siret'] = $account->data->siret;
 
-        $bank = self::getInstance()->requestApi('get-data', array('type' => 'bank'));
-        if (self::getInstance()->isContainsError($bank)) {
-            return $bank->error;
-        }
-        if ($bank == false) {
-            return false;
-        }
-
-        foreach ($bank->data as $rib) {
-            if ($rib->isDefault == "1") {
-                $infosAccount['IBAN'] = $rib->iban;
-            }
-        }
-
-        $shop = self::getInstance()->requestApi('get-data', ['type' => 'shop']);
-        if (self::getInstance()->isContainsError($bank)) {
-            return $shop->error;
-        }
-        if ($shop == false) {
-            return false;
-        }
-        $infosAccount['url'] = $shop->data->url;
-        $infosAccount['modules'] = $shop->data->modules;
-        $infosAccount['solidarityType'] = $shop->data->extra->solidarityType;
-
-        if (isset($shop->data->businessIdentifier)) {
-            $infosAccount['siret'] = $shop->data->businessIdentifier;
+        switch ($accountType) {
+            case 'bank':
+                foreach ($accountType->data as $rib) {
+                    if ($rib->isDefault == "1") {
+                        $infosAccount['IBAN'] = $rib->iban;
+                    }
+                }
+                break;
+            case 'shop':
+                $infosAccount['url'] = $account->data->url;
+                $infosAccount['modules'] = $account->data->modules;
+                $infosAccount['solidarityType'] = $account->data->extra->solidarityType;
+                if (isset($account->data->businessIdentifier)) {
+                    $infosAccount['siret'] = $account->data->businessIdentifier;
+                }
+                break;
+            default:
+                $infosAccount['siret'] = $account->data->siret;
+                break;
         }
 
         $infosAccount['valide'] = true;
@@ -212,42 +109,16 @@ class PaygreenTransactionHelper
     }
 
     /**
+     * @param $action
      * @param $allData
      * @return mixed|object
      */
-    public static function getRoundingInfo($allData)
+    public static function roundingFunction($action, $allData)
     {
-        $transaction = self::getInstance()->requestApi('get-rounding', $allData);
+        $transaction = self::transactionFunctions($action, $allData);
         if (self::getInstance()->isContainsError($transaction)) {
             return $transaction->error;
         }
         return $transaction;
-    }
-
-    /**
-     * @param $allData
-     * @return mixed|object
-     */
-    public static function validateRounding($allData)
-    {
-        $validate = self::getInstance()->requestApi('validate-rounding', $allData);
-        if (self::getInstance()->isContainsError($validate)) {
-            return $validate->error;
-        }
-        return $validate;
-    }
-
-    /**
-     * @param $allData
-     * @return mixed|object
-     */
-    public static function refundRounding($allData)
-    {
-        $allData['content'] = array('paymentToken' => $allData['paymentToken']);
-        $refund = self::getInstance()->requestApi('refund-rounding', $allData);
-        if (self::getInstance()->isContainsError($refund)) {
-            return $refund->error;
-        }
-        return $refund;
     }
 }
