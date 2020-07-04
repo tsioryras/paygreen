@@ -67,7 +67,7 @@ class PaygreenTransactionHelper
      * @param $accountType
      * @return array|bool
      */
-    public static function getAccountInfos()
+    public static function getAccountInfos($accountType)
     {
         $infosAccount = [];
         $accounts = ['account', 'bank', 'shp'];
@@ -79,7 +79,6 @@ class PaygreenTransactionHelper
             if ($account == false) {
                 return false;
             }
-
             switch ($accountType) {
                 case 'bank':
                     foreach ($accountType->data as $rib) {
