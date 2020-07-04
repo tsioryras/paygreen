@@ -1,47 +1,53 @@
 <?php
 
+namespace Paygreen;
+
+
 class PaygreenTransactionHelper
 {
+    private static $paygreenInstance = null;
+
     /**
-     * @return PaygreenAPI|null
+     * @param PaygreenAPI|null $paygreenInstance
      */
-    public static function getInstance()
+    public static function setPaygreenInstance($paygreenInstance = null): void
     {
-        return new PaygreenAPI();
+        self::$paygreenInstance = $paygreenInstance ?? new PaygreenAPI();
     }
 
     /**
-     * @param $action
-     * @param null $data
-     * @param null $activate
-     * @param null $pid
-     * @param null $amount
+     * @return PaygreenAPI|null
+     */
+    public static function getPaygreenInstance()
+    {
+        return self::$paygreenInstance ?? new PaygreenAPI();
+    }
+
+    /**
+     * @param string $action
+     * @param mixed|null $data
      * @return bool|mixed|object
      */
-    public static function transactionFunctions($action, $data = null, $activate = null, $pid = null, $amount = null)
+    public static function transactionFunctions($action, $data = null)
     {
         switch ($action) {
             case 'refund':
-                if ($pid == null) {
+                if (!isset($data['pid'])) {
                     return false;
                 }
 
-                $data = ['pid' => $pid];
-                if ($amount != null) {
-                    $data['content'] = ['amount' => $amount * 100];
+                if ($data['amount'] != null) {
+                    $data['content'] = ['amount' => $data['amount'] * 100];
                 }
                 break;
             case 'validate-shop':
-                if ($activate != 1 && $activate != 0) {
-                    return false;
-                }
-                $data = ['content' => ['activate' => $activate]];
+                $data = ['content' => ['activate' => $data['activate']]];
                 break;
             default:
                 break;
         }
 
-        return self::getInstance()->requestApi($action, $data);
+        return self::getPaygreenInstance()->requestApi($action, $data);
     }
 
     /**
@@ -67,19 +73,22 @@ class PaygreenTransactionHelper
      * @param $accountType
      * @return array|bool
      */
-    public static function getAccountInfos($accountType)
+    public static function getAccountInfos()
     {
         $infosAccount = [];
-        $accounts = ['account', 'bank', 'shp'];
+        $accounts = ['account', 'bank', 'shop'];
         foreach ($accounts as $accountType) {
             $account = self::transactionFunctions('get-data', ['type' => $accountType]);
-            if (self::getInstance()->isContainsError($account)) {
+            if (self::getPaygreenInstance()->isContainsError($account)) {
                 return $account->error;
             }
             if ($account == false) {
                 return false;
             }
             switch ($accountType) {
+                case 'account':
+                    $infosAccount['siret'] = $account->data->siret;
+                    break;
                 case 'bank':
                     foreach ($accountType->data as $rib) {
                         if ($rib->isDefault == "1") {
@@ -96,7 +105,6 @@ class PaygreenTransactionHelper
                     }
                     break;
                 default:
-                    $infosAccount['siret'] = $account->data->siret;
                     break;
             }
         }
@@ -112,7 +120,7 @@ class PaygreenTransactionHelper
     public static function roundingFunction($action, $allData)
     {
         $transaction = self::transactionFunctions($action, $allData);
-        if (self::getInstance()->isContainsError($transaction)) {
+        if (self::getPaygreenInstance()->isContainsError($transaction)) {
             return $transaction->error;
         }
         return $transaction;

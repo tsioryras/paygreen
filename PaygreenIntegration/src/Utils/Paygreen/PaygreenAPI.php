@@ -1,5 +1,7 @@
 <?php
 
+namespace Paygreen;
+
 class PaygreenAPI
 {
     private $ui;
@@ -8,9 +10,9 @@ class PaygreenAPI
 
     /**
      * PaygreenAPI constructor.
-     * @param $ui
-     * @param $cp
-     * @param $host
+     * @param string|mixed $ui
+     * @param string|mixed $cp
+     * @param string|mixed $host
      */
     public function __construct($ui = null, $cp = null, $host = null)
     {
@@ -20,7 +22,7 @@ class PaygreenAPI
     }
 
     /**
-     * @return mixed
+     * @return string|mixed
      */
     public function getUi()
     {
@@ -36,7 +38,7 @@ class PaygreenAPI
     }
 
     /**
-     * @return mixed
+     * @return string|mixed
      */
     public function getHost()
     {
@@ -52,7 +54,7 @@ class PaygreenAPI
     }
 
     /**
-     * @param $var
+     * @param mixed $var
      * @return bool
      */
     public function isContainsError($var)
@@ -61,8 +63,8 @@ class PaygreenAPI
     }
 
     /**
-     * @param $action
-     * @param null $allData
+     * @param string $action
+     * @param array|null $allData
      * @return mixed|object
      */
     public function requestApi($action, $allData = null)
@@ -84,8 +86,8 @@ class PaygreenAPI
     }
 
     /**
-     * @param $allData_request
-     * @param $content
+     * @param array|$allData_request
+     * @param mixed $content
      * @return bool|string
      */
     private function request_api_curl($allData_request, $content)
@@ -115,9 +117,9 @@ class PaygreenAPI
     }
 
     /**
-     * @param $allData_request
-     * @param $content
-     * @return false|string
+     * @param array $allData_request
+     * @param mixed $content
+     * @return bool|string
      */
     private function request_api_fopen($allData_request, $content)
     {
@@ -136,8 +138,8 @@ class PaygreenAPI
     }
 
     /**
-     * @param $action
-     * @param $allData
+     * @param string $action
+     * @param array $allData
      * @return array
      */
     private function getAction($action, $allData)

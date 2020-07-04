@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use PaygreenTransactionHelper;
+use Paygreen\PaygreenTransactionHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -75,6 +75,7 @@ class HomeController extends AbstractController
      */
     public function getDetails(Request $request)
     {
+
         return new JsonResponse(PaygreenTransactionHelper::transactionFunctions('get-datas', ['pid' => $request->get('pid')]));
     }
 }

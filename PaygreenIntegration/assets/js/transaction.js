@@ -2,31 +2,36 @@ $(document).ready(function () {
     //Validate transaction
     $('#validate-create-cash').on('click', (e) => {
         e.preventDefault();
-        $.ajax({
-            url: $('#create-cash').attr('action'),
-            type: 'post',
-            dataType: 'json',
-            data: {
-                'companyName': $('#companyName').val(),
-                'firstName': $('#firstName').val(),
-                'lastName': $('#lastName').val(),
-                'email': $('#email').val(),
-                'country': $('#country').val(),
-                'amount': $('#amount').val()
-            },
-            success: function (data) {
-                if (data.error === '') {
-                    $('#firstName').val('');
-                    $('#lastName').val('');
-                    $('#email').val('');
-                    $('#amount').val('');
-                    $('#message').text('Transaction (ID : ' + data.data.data.id + ') bien effectuée');
-                    $('.notif-transaction').removeClass('d-none');
+        if ($('#amount').val() == '') {
+            $('#amount').addClass('is-invalid');
+        } else {
+            $.ajax({
+                url: $('#create-cash').attr('action'),
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    'companyName': $('#companyName').val(),
+                    'firstName': $('#firstName').val(),
+                    'lastName': $('#lastName').val(),
+                    'email': $('#email').val(),
+                    'country': $('#country').val(),
+                    'amount': $('#amount').val()
+                },
+                success: function (data) {
+                    if (data.error === '') {
+                        $('#firstName').val('');
+                        $('#lastName').val('');
+                        $('#email').val('');
+                        $('#amount').val('');
+                        $('#message').text('Transaction (ID : ' + data.data.data.id + ') bien effectuée');
+                        $('.notif-transaction').removeClass('d-none');
+                    }
+                    $('#amount').removeClass('is-invalid');
+                    $('#amountHelp').text(data.error);
                 }
+            });
+        }
 
-                $('#amountHelp').text(data.error);
-            }
-        });
     });
 
     $('button.close').on('click', () => {
@@ -36,6 +41,7 @@ $(document).ready(function () {
 //Get transaction info
     $('#validate-pid').on('click', (e) => {
         e.preventDefault();
+        $('table').html('');
         $('#pid').removeClass('is-invalid');
         $.ajax({
             url: $('#get-details').attr('action'),
