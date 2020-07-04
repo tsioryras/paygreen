@@ -3,7 +3,7 @@
 namespace Paygreen;
 
 
-class PaygreenTransactionHelper
+class PaygreenActionHelper
 {
     private static $paygreenInstance = null;
 
@@ -28,7 +28,7 @@ class PaygreenTransactionHelper
      * @param mixed|null $data
      * @return bool|mixed|object
      */
-    public static function transactionFunctions($action, $data = null)
+    public static function actionFunctions($action, $data = null)
     {
         switch ($action) {
             case 'refund':
@@ -55,22 +55,18 @@ class PaygreenTransactionHelper
      */
     public static function validIdShop()
     {
-        $valid = self::transactionFunctions('are-valid-ids');
+        $valid = self::actionFunctions('are-valid-ids');
 
         if ($valid != false) {
             if (isset($valid->error)) {
                 return $valid;
             }
-            if ($valid->success == 0) {
-                return false;
-            }
-            return true;
+            return !($valid->success == 0);
         }
         return false;
     }
 
     /**
-     * @param $accountType
      * @return array|bool
      */
     public static function getAccountInfos()
@@ -78,7 +74,7 @@ class PaygreenTransactionHelper
         $infosAccount = [];
         $accounts = ['account', 'bank', 'shop'];
         foreach ($accounts as $accountType) {
-            $account = self::transactionFunctions('get-data', ['type' => $accountType]);
+            $account = self::actionFunctions('get-data', ['type' => $accountType]);
             if (self::getPaygreenInstance()->isContainsError($account)) {
                 return $account->error;
             }
@@ -113,13 +109,13 @@ class PaygreenTransactionHelper
     }
 
     /**
-     * @param $action
-     * @param $allData
+     * @param string $action
+     * @param array $allData
      * @return mixed|object
      */
     public static function roundingFunction($action, $allData)
     {
-        $transaction = self::transactionFunctions($action, $allData);
+        $transaction = self::actionFunctions($action, $allData);
         if (self::getPaygreenInstance()->isContainsError($transaction)) {
             return $transaction->error;
         }

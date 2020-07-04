@@ -15,20 +15,20 @@
                 <form action="{{ path('create_cash') }}" id="create-cash">
                     <div class="form-group">
                         <label for="companyName">COMPANY</label>
-                        <input class="form-control" type="text" id="companyName" name="companyName"
-                               placeholder="Paygreen">
+                        <input class="form-control" type="text" id="companyName" name="companyName">
                     </div>
                     <div class="form-group">
                         <label for="lastName">NOM</label>
-                        <input class="form-control" type="text" id="lastName" name="lastName" placeholder="Henry">
+                        <input class="form-control" type="text" id="lastName" name="lastName" required>
                     </div>
                     <div class="form-group">
                         <label for="firstName">PRENOM</label>
-                        <input class="form-control" type="text" id="firstName" name="firstName" placeholder="Marc">
+                        <input class="form-control" type="text" id="firstName" name="firstName">
                     </div>
                     <div class="form-group">
                         <label for="email">EMAIL</label>
-                        <input class="form-control" type="text" id="email" name="email" placeholder="mh@company.com">
+                        <input class="form-control" type="email" id="email" name="email" placeholder="mh@company.com"
+                               required>
                     </div>
                     <div class="form-group">
                         <label for="country">PAYS</label>
@@ -38,8 +38,7 @@
                     </div>
                     <div class="form-group">
                         <label for="amount">MONTANT (€)</label>
-                        <input type="text" class="form-control" id="amount" aria-describedby="amountHelp"
-                               placeholder="1000">
+                        <input type="text" class="form-control" id="amount" aria-describedby="amountHelp" required>
                         <small id="amountHelp" class="text-danger"></small>
                     </div>
                     <div class="form-group text-center">
@@ -61,8 +60,10 @@
                             <div class="input-group-append">
                                 <button type="submit" class="btn-secondary btn" id="validate-pid">VOIR</button>
                             </div>
-                            <div id="pidHelp"></div>
                         </div>
+                    </div>
+                    <div class="col-md-12">
+                        <small id="pidHelp" class="text-danger"></small>
                     </div>
                 </form>
                 <div id="result">

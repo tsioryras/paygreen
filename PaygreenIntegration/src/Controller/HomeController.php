@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use Paygreen\PaygreenTransactionHelper;
+use Paygreen\PaygreenActionHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,8 +25,8 @@ class HomeController extends AbstractController
      */
     public function createCash(Request $request)
     {
-        $amount = str_replace(' ', '', $request->request->get('amount'));
-        $amount = str_replace('.', ',', $amount);
+        $amount = trim(str_replace(' ', '', $request->request->get('amount')));
+        $amount = trim(str_replace('.', ',', $amount));
 
         $amountFormatOK = false;
         $amountParts = explode(',', $amount);
@@ -49,12 +49,12 @@ class HomeController extends AbstractController
                     "notified_url" => "",
                     "buyer" => [
                         "id" => rand(100000, 999999),
-                        "lastName" => $request->request->get('lastName'),
-                        "firstName" => $request->request->get('firstName'),
-                        "email" => $request->request->get('email'),
-                        "country" => $request->request->get('country'),
+                        "lastName" => trim($request->request->get('lastName')),
+                        "firstName" => trim($request->request->get('firstName')),
+                        "email" => trim($request->request->get('email')),
+                        "country" => trim($request->request->get('country')),
                         "ipAddress" => $_SERVER['REMOTE_ADDR'],
-                        "companyName" => $request->request->get('companyName')
+                        "companyName" => trim($request->request->get('companyName'))
                     ],
                     "metadata" => [
                         "orderId" => "test-123",
@@ -62,7 +62,7 @@ class HomeController extends AbstractController
                     ],
                 ]
             ];
-            return new JsonResponse(['data' => PaygreenTransactionHelper::transactionFunctions('create-cash', $data), 'error' => '']);
+            return new JsonResponse(['data' => PaygreenActionHelper::actionFunctions('create-cash', $data), 'error' => '']);
         }
         $error = 'Le montant doit-être un nombre (avec au plus 2 chiffres après la virgule)';
         return new JsonResponse(['error' => $error]);
@@ -75,7 +75,7 @@ class HomeController extends AbstractController
      */
     public function getDetails(Request $request)
     {
-
-        return new JsonResponse(PaygreenTransactionHelper::transactionFunctions('get-datas', ['pid' => $request->get('pid')]));
+        $pid = trim($request->get('pid'));
+        return new JsonResponse(PaygreenActionHelper::actionFunctions('get-datas', ['pid' => $pid]));
     }
 }

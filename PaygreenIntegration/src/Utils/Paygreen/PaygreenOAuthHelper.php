@@ -37,7 +37,7 @@ class PaygreenOAuthHelper
         ];
         $datas['content'] = $subParam;
 
-        return PaygreenTransactionHelper::transactionFunctions('oAuth-access', $datas);
+        return PaygreenActionHelper::actionFunctions('oAuth-access', $datas);
     }
 
     /**
