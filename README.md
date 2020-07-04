@@ -13,5 +13,5 @@ PAYGREEN TEST est un projet Symfony permettant d'effectuer des transactions et d
 * `yarn build`
 * `symfony serve --no-tls --daemon`
 * taper dans la barre d'addresse de votre navigateur internet -- http://127.0.0.1:8000 -- (port par défaut)
-
+* lisez le README.md qui se trouve dans le projet
 ---
